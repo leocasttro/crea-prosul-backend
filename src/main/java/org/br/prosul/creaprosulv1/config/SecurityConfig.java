@@ -50,6 +50,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     // Permite acesso irrestrito aos endpoints de autenticação e registro de usuários
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/auth/me").authenticated()
                     // Todas as outras requisições exigem autenticação
                     .anyRequest().authenticated())
             // Define a política de criação de sessão como STATELESS, ideal para APIs REST com JWT

@@ -4,22 +4,24 @@ public class ProfessionalCreateDTO {
 
   private String registrationNumber;
   private String name;
-  private String formation;
+  private Long formationId; // Substitui formationServiceActivities
   private String contactEmail;
   private String phoneNumber;
 
   public ProfessionalCreateDTO() {}
 
-  public ProfessionalCreateDTO(String registrationNumber, String name, String formation, String contactEmail) {
+  public ProfessionalCreateDTO(String registrationNumber, String name, Long formationId, String contactEmail, String phoneNumber) {
     this.registrationNumber = registrationNumber;
     this.name = name;
-    this.formation = formation;
+    this.formationId = formationId;
     this.contactEmail = contactEmail;
+    this.phoneNumber = phoneNumber;
   }
 
   public String getRegistrationNumber() {
     return registrationNumber;
   }
+
   public void setRegistrationNumber(String registrationNumber) {
     this.registrationNumber = registrationNumber;
   }
@@ -27,20 +29,23 @@ public class ProfessionalCreateDTO {
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
   }
 
-  public String getFormation() {
-    return formation;
+  public Long getFormationId() {
+    return formationId;
   }
-  public void setFormation(String formation) {
-    this.formation = formation;
+
+  public void setFormationId(Long formationId) {
+    this.formationId = formationId;
   }
 
   public String getContactEmail() {
     return contactEmail;
   }
+
   public void setContactEmail(String contactEmail) {
     this.contactEmail = contactEmail;
   }
@@ -48,6 +53,7 @@ public class ProfessionalCreateDTO {
   public String getPhoneNumber() {
     return phoneNumber;
   }
+
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }

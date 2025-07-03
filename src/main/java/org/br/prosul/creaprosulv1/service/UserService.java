@@ -2,6 +2,7 @@ package org.br.prosul.creaprosulv1.service;
 
 import org.br.prosul.creaprosulv1.dto.UserCreateDTO;
 import org.br.prosul.creaprosulv1.entity.UserEntity;
+import org.br.prosul.creaprosulv1.model.UserModel;
 import org.br.prosul.creaprosulv1.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -37,5 +38,17 @@ public class UserService {
     userRepository.save(newUser);
 
     return ResponseEntity.ok("usuário criado com sucesso!");
+  }
+
+  public UserModel findByUsername(String username) {
+    return userRepository.findByUsername(username)
+            .map(userEntity -> {
+              UserModel userModel = new UserModel();
+              userModel.setId(userEntity.getId());
+              userModel.setUsername(userEntity.getUsername());
+              userModel.setRoles(userEntity.getRoles());
+              return userModel;
+            })
+            .orElse(null);
   }
 }

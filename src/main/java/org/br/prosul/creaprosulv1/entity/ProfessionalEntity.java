@@ -16,8 +16,9 @@ public class ProfessionalEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = false)
-  private String formation_id;
+  @ManyToOne
+  @JoinColumn(name = "formation_id", referencedColumnName = "id")
+  private FormationEntity formation; // Nova relação com FormationEntity
 
   @Column
   private String contactEmail;
@@ -27,10 +28,10 @@ public class ProfessionalEntity {
 
   public ProfessionalEntity() {}
 
-  public ProfessionalEntity(String registrationNumber, String name, String formation_id, String contactEmail, String phoneNumber) {
+  public ProfessionalEntity(String registrationNumber, String name, FormationEntity formation, String contactEmail, String phoneNumber) {
     this.registrationNumber = registrationNumber;
     this.name = name;
-    this.formation_id = formation_id;
+    this.formation = formation;
     this.contactEmail = contactEmail;
     this.phoneNumber = phoneNumber;
   }
@@ -38,6 +39,7 @@ public class ProfessionalEntity {
   public Long getId() {
     return id;
   }
+
   public void setId(Long id) {
     this.id = id;
   }
@@ -45,6 +47,7 @@ public class ProfessionalEntity {
   public String getRegistrationNumber() {
     return registrationNumber;
   }
+
   public void setRegistrationNumber(String registrationNumber) {
     this.registrationNumber = registrationNumber;
   }
@@ -52,20 +55,23 @@ public class ProfessionalEntity {
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
   }
 
-  public String getFormation() {
-    return formation_id;
+  public FormationEntity getFormation() {
+    return formation;
   }
-  public void setFormation(String formation_id) {
-    this.formation_id = formation_id;
+
+  public void setFormation(FormationEntity formation) {
+    this.formation = formation;
   }
 
   public String getContactEmail() {
     return contactEmail;
   }
+
   public void setContactEmail(String contactEmail) {
     this.contactEmail = contactEmail;
   }
@@ -73,8 +79,8 @@ public class ProfessionalEntity {
   public String getPhoneNumber() {
     return phoneNumber;
   }
+
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 }
-

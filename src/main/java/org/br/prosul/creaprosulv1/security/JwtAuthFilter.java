@@ -7,11 +7,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,6 +29,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   @Value("${jwt.secret}")
   private String jwtSecret;
 
+  private final UserDetailsService userDetailsService;
+
+  @Autowired
+  public JwtAuthFilter(UserDetailsService userDetailsService) {
+    this.userDetailsService = userDetailsService;
+  }
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
           throws ServletException, IOException {
@@ -35,6 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String authHeader = request.getHeader("Authorization");
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      System.out.println("Nenhum token Bearer encontrado no cabeçalho");
       filterChain.doFilter(request, response);
       return;
     }
@@ -52,13 +63,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
       String username = claims.getSubject();
       System.out.println("Username extraído: " + username);
 
-      @SuppressWarnings("unchecked")
-      List<String> roles = claims.get("roles", List.class);
-      System.out.println("Roles extraídas: " + roles);
-
       if (username == null) {
         throw new RuntimeException("Username não encontrado no token");
       }
+
+      UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+      System.out.println("UserDetails carregado: " + userDetails.getUsername() + ", Authorities: " + userDetails.getAuthorities());
+
+      @SuppressWarnings("unchecked")
+      List<String> roles = claims.get("roles", List.class);
+      System.out.println("Roles extraídas: " + roles);
 
       List<SimpleGrantedAuthority> authorities = roles.stream()
               .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
@@ -67,7 +81,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
       UsernamePasswordAuthenticationToken authentication =
               new UsernamePasswordAuthenticationToken(
-                      username,
+                      userDetails,
                       null,
                       authorities);
 
