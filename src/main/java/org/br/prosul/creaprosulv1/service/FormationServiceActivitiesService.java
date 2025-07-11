@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FormationServiceActivitiesService {
 
@@ -21,18 +23,18 @@ public class FormationServiceActivitiesService {
     this.activitiesRepository = activitiesRepository;
   }
 
-  public Page<FormationServiceActivitiesDTO> findByFormationId(Long formationId, Pageable pageable) {
+  public List<FormationServiceActivitiesDTO> findByFormationId(Long formationId) {
     if (formationId == null) {
       throw new IllegalArgumentException("Formation ID cannot be null");
     }
-    return repository.findByFormationId(formationId, pageable);
+    return repository.findByFormationId(formationId);
   }
 
-  public Page<FormationServiceActivitiesDTO> findByServiceId(Long serviceId, Pageable pageable) {
+  public List<FormationServiceActivitiesDTO> findByServiceId(Long serviceId) {
     if (serviceId == null) {
       throw new IllegalArgumentException("Service ID cannot be null");
     }
-    return repository.findByServiceId(serviceId, pageable);
+    return repository.findByServiceId(serviceId);
   }
 
   public ActivitiesEntity findActivityById(Long activityId) {

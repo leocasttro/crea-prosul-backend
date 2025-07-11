@@ -24,7 +24,7 @@ public class ProfessionalController {
     this.professionalService = professionalService;
   }
 
-  @PostMapping("/createProfessionals")
+  @PostMapping("/createProfessional")
   public ResponseEntity<?> registerProfessional(@Validated @RequestBody ProfessionalCreateDTO professionalCreateDTO) {
     try {
       ProfessionalEntity professionalEntity = professionalService.registerProfessional(professionalCreateDTO);

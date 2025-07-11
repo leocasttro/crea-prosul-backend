@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/formation-service-activities")
 public class FormationServiceActivitiesController {
@@ -22,11 +25,10 @@ public class FormationServiceActivitiesController {
   }
 
   @GetMapping("/byFormation/{formationId}")
-  public ResponseEntity<Page<FormationServiceActivitiesDTO>> getByFormationId(
-          @PathVariable Long formationId,
-          Pageable pageable) {
+  public ResponseEntity<List<FormationServiceActivitiesDTO>> getByFormationId(
+          @PathVariable Long formationId) {
     try {
-      Page<FormationServiceActivitiesDTO> result = service.findByFormationId(formationId, pageable);
+      List<FormationServiceActivitiesDTO> result = service.findByFormationId(formationId);
       return ResponseEntity.ok(result);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -34,19 +36,18 @@ public class FormationServiceActivitiesController {
   }
 
   @GetMapping("/byService/{serviceId}/activities")
-  public ResponseEntity<Page<ActivityProjection>> getActivitiesByServiceId(
-          @PathVariable Long serviceId,
-          Pageable pageable) {
+  public ResponseEntity<List<ActivityProjection>> getActivitiesByServiceId(
+          @PathVariable Long serviceId) {
     try {
-      Page<FormationServiceActivitiesDTO> result = service.findByServiceId(serviceId, pageable);
-      Page<ActivityProjection> projectedPage = result.map(dto -> {
+      List<FormationServiceActivitiesDTO> result = service.findByServiceId(serviceId);
+      List<ActivityProjection> projectedList = result.stream().map(dto -> {
         ActivitiesEntity activity = service.findActivityById(dto.getAtividadeId());
         return new ActivityProjection(
                 activity != null ? activity.getCodigo_atividade() : null,
                 activity != null ? activity.getDescricao_atividade() : null
         );
-      });
-      return ResponseEntity.ok(projectedPage);
+      }).collect(Collectors.toList());
+      return ResponseEntity.ok(projectedList);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
