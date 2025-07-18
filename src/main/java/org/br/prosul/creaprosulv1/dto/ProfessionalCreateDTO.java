@@ -7,15 +7,17 @@ public class ProfessionalCreateDTO {
   private Long formationId; // Substitui formationServiceActivities
   private String contactEmail;
   private String phoneNumber;
+  private String cpf;
 
   public ProfessionalCreateDTO() {}
 
-  public ProfessionalCreateDTO(String registrationNumber, String name, Long formationId, String contactEmail, String phoneNumber) {
+  public ProfessionalCreateDTO(String registrationNumber, String name, Long formationId, String contactEmail, String phoneNumber, String cpf) {
     this.registrationNumber = registrationNumber;
     this.name = name;
     this.formationId = formationId;
     this.contactEmail = contactEmail;
     this.phoneNumber = phoneNumber;
+    this.cpf = cpf;
   }
 
   public String getRegistrationNumber() {
@@ -56,5 +58,13 @@ public class ProfessionalCreateDTO {
 
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
   }
 }

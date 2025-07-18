@@ -1,6 +1,7 @@
 package org.br.prosul.creaprosulv1.controller;
 
 import org.br.prosul.creaprosulv1.dto.ProfessionalCreateDTO;
+import org.br.prosul.creaprosulv1.dto.ProfessionalUpdateDTO;
 import org.br.prosul.creaprosulv1.entity.ProfessionalEntity;
 import org.br.prosul.creaprosulv1.entity.ServicesPrincipalEntity;
 import org.br.prosul.creaprosulv1.service.ProfessionalService;
@@ -107,5 +108,17 @@ public class ProfessionalController {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+  }
+
+  @DeleteMapping("/deleteProfessional/{professionalId}")
+  public ResponseEntity<Void> deleteProfessional(@PathVariable Long professionalId) {
+    professionalService.deleteProfessional(professionalId);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PutMapping("/updateProfessional/{id}")
+  public ResponseEntity<ProfessionalEntity>  updateProfessional(@PathVariable Long id, @RequestBody ProfessionalUpdateDTO professionalDTO) {
+    ProfessionalEntity updateProfessional = professionalService.updateProfessional(id, professionalDTO);
+    return ResponseEntity.ok(updateProfessional);
   }
 }

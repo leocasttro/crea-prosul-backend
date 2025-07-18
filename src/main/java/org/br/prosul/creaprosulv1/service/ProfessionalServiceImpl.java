@@ -1,6 +1,8 @@
 package org.br.prosul.creaprosulv1.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.br.prosul.creaprosulv1.dto.ProfessionalCreateDTO;
+import org.br.prosul.creaprosulv1.dto.ProfessionalUpdateDTO;
 import org.br.prosul.creaprosulv1.entity.FormationEntity;
 import org.br.prosul.creaprosulv1.entity.ProfessionalEntity;
 import org.br.prosul.creaprosulv1.entity.ServicesPrincipalEntity;
@@ -93,5 +95,54 @@ public class ProfessionalServiceImpl implements ProfessionalService {
   @Override
   public List<ServicesPrincipalEntity> searchServicesByFormation(Long formationId) {
     return servicesPrincipalRepository.findByFormacaoServicoAtividades_Formation_Id(formationId);
+  }
+
+  @Override
+  public ProfessionalEntity deleteProfessional(Long id) {
+    Optional<ProfessionalEntity> existingProfessional = professionalRepository.findById(id);
+    if (existingProfessional.isPresent()) {
+      ProfessionalEntity professional = existingProfessional.get();
+      professionalRepository.delete(professional);
+      return professional;
+    } else {
+      throw new EntityNotFoundException("Profissional com ID " + id + " não encontrado.");
+    }
+  }
+
+  @Override
+  public ProfessionalEntity updateProfessional(Long id, ProfessionalUpdateDTO professionalDTO) {
+    Optional<ProfessionalEntity> existingProfessional = professionalRepository.findById(id);
+    if (existingProfessional.isEmpty()) {
+      throw new EntityNotFoundException("Profissional com ID " + id + " não encontrado.");
+    }
+
+    ProfessionalEntity professional = existingProfessional.get();
+
+    if (professionalDTO.getRegistrationNumber() != null && !professionalDTO.getRegistrationNumber().equals(professional.getRegistrationNumber())) {
+      Optional<ProfessionalEntity> duplicateProfessional = professionalRepository.findByRegistrationNumber(professionalDTO.getRegistrationNumber());
+      if (duplicateProfessional.isPresent()) {
+        throw new IllegalArgumentException("Já existe um profissional cadastrado com esse número de registro: " + professionalDTO.getRegistrationNumber());
+      }
+      professional.setRegistrationNumber(professionalDTO.getRegistrationNumber());
+    }
+
+    if (professionalDTO.getCpf() != null && !professionalDTO.getCpf().equals(professional.getCpf())) {
+      Optional<ProfessionalEntity> duplicateCpf = professionalRepository.findByCpf(professionalDTO.getCpf());
+      if (duplicateCpf.isPresent() && !duplicateCpf.get().getId().equals(id)) {
+        throw new IllegalArgumentException("Já existe um profissional cadastrado com esse CPF: " + professionalDTO.getCpf());
+      }
+      professional.setCpf(professionalDTO.getCpf());
+    }
+
+    if (professionalDTO.getName() != null) {
+      professional.setName(professionalDTO.getName());
+    }
+    if (professionalDTO.getContactEmail() != null) {
+      professional.setContactEmail(professionalDTO.getContactEmail());
+    }
+    if (professionalDTO.getPhoneNumber() != null) {
+      professional.setPhoneNumber(professionalDTO.getPhoneNumber());
+    }
+    return professionalRepository.save(professional);
   }
 }

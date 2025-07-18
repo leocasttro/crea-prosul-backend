@@ -1,6 +1,7 @@
 package org.br.prosul.creaprosulv1.service;
 
 import org.br.prosul.creaprosulv1.dto.ProfessionalCreateDTO;
+import org.br.prosul.creaprosulv1.dto.ProfessionalUpdateDTO;
 import org.br.prosul.creaprosulv1.entity.ProfessionalEntity;
 import org.br.prosul.creaprosulv1.entity.ServicesPrincipalEntity;
 
@@ -15,4 +16,6 @@ public interface ProfessionalService {
   List<ProfessionalEntity> searchProfessionalsByActivity(Long activityId);
   List<ProfessionalEntity> searchProfessionalsByCriteria(Long formationId, Long serviceId, Long activityId);
   List<ServicesPrincipalEntity> searchServicesByFormation(Long formationId);
+  ProfessionalEntity deleteProfessional(Long id);
+  ProfessionalEntity updateProfessional(Long id, ProfessionalUpdateDTO professionalUpdateDTO);
 }

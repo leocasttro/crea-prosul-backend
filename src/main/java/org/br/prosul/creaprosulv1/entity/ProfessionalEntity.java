@@ -26,14 +26,18 @@ public class ProfessionalEntity {
   @Column
   private String phoneNumber;
 
+  @Column
+  private String cpf;
+
   public ProfessionalEntity() {}
 
-  public ProfessionalEntity(String registrationNumber, String name, FormationEntity formation, String contactEmail, String phoneNumber) {
+  public ProfessionalEntity(String registrationNumber, String name, FormationEntity formation, String contactEmail, String phoneNumber, String cpf) {
     this.registrationNumber = registrationNumber;
     this.name = name;
     this.formation = formation;
     this.contactEmail = contactEmail;
     this.phoneNumber = phoneNumber;
+    this.cpf = cpf;
   }
 
   public Long getId() {
@@ -82,5 +86,13 @@ public class ProfessionalEntity {
 
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
   }
 }

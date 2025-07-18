@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ProfessionalRepository extends JpaRepository<ProfessionalEntity, Long> {
 
   Optional<ProfessionalEntity> findByRegistrationNumber(String registrationNumber);
+  Optional<ProfessionalEntity> findByCpf(String cpf);
 }
